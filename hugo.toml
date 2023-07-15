@@ -1,0 +1,51 @@
+baseURL = 'http://MichalStrehovsky.github.io/'
+languageCode = 'en-us'
+title = "Michal's low level corner"
+theme = 'hugo-theme-stack'
+
+[[params.widgets.homepage]]
+type = "search"
+
+#[[params.widgets.homepage]]
+#type = "tag-cloud"
+
+#[params.widgets.homepage.params]
+#limit = 10
+
+[params.footer]
+since = 2001
+
+[params.sidebar.avatar]
+enabled = false
+
+[params.sidebar]
+subtitle = "Things about C#, .NET and low level topics I find interesting"
+
+[[menu.social]]
+identifier = "github"
+name = "GitHub"
+url = "https://github.com/MichalStrehovsky"
+
+[menu.social.params]
+icon = "brand-github"
+
+[[menu.social]]
+identifier = "twitter"
+name = "Twitter"
+url = "https://twitter.com/MStrehovsky"
+
+[menu.social.params]
+icon = "brand-twitter"
+
+[[menu.social]]
+identifier = "rss"
+name = "RSS"
+url = "/index.xml"
+
+[menu.social.params]
+icon = "rss"
+
+[markup.highlight]
+noClasses = false
+#lineNos = true
+#lineNumbersInTable = true
