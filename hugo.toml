@@ -1,4 +1,4 @@
-baseURL = 'http://MichalStrehovsky.github.io/'
+baseURL = 'https://migeel.sk/'
 languageCode = 'en-us'
 title = "Michal's low level corner"
 theme = 'hugo-theme-stack'
