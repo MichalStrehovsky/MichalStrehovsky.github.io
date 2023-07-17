@@ -4,6 +4,9 @@ slug: "fight-the-global-warming-compile-your-csharp-apps-ahead-of-time"
 date: 2019-05-01T18:45:19+09:00
 image: 00-engine.jpeg
 description: A look at how different kinds of ahead of time compilation in .NET work under the hood.
+tags:
+  - long-form
+  - dotnet
 ---
 
 > NOTE: This article captures a point in time in the past. While the general information is still correct, the CoreRT project got folded into [Native AOT publishing](https://learn.microsoft.com/dotnet/core/deploying/native-aot/) in .NET 7 and is now a supported part of .NET. The information about sizes is no longer accurate (and much better), neither is the information about support for dynamic code (both interpreter and JIT are unsupported).

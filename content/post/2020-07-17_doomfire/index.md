@@ -4,12 +4,11 @@ slug: "doom-fire-effect-in-csharp-running-on-windows-nt-3.51"
 date: 2020-07-17T15:45:31+09:00
 description: How I got the DOOM fire effect written in C# running on Windows NT.
 image: 08-running.png
-categories:
-  - hacks
 tags:
   - hack
   - retrocomputing
-  - csharp
+  - dotnet
+  - long-form
 ---
 
 There's something deeply satisfying about making old technology do new things. When I was reading Fabien Sanglard's article about [how the DOOM fire effect was implemented](https://fabiensanglard.net/doom_fire_psx/) I wondered - can I implement this effect in a 21st century programming language and have it run on something from the DOOM era?

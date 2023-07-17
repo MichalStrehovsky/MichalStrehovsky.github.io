@@ -4,10 +4,9 @@ slug: "building-a-self-contained-game-in-csharp-under-8-kilobytes"
 date: 2020-01-03T14:13:20+09:00
 image: 01-floppies.jpg
 description: How I fit a Snake game in C# into 8 kilobytes, with no .NET runtime required.
-categories:
-  - hacks
 tags:
-  - csharp
+  - dotnet
+  - long-form
 ---
 
 > NOTE: This article captures a point in time in the past. While the general information is still correct, the CoreRT project got folded into [Native AOT publishing](https://learn.microsoft.com/dotnet/core/deploying/native-aot/) in .NET 7 and is now a supported part of .NET. The information about sizes is no longer accurate (and much better), neither is the information about support for dynamic code (both interpreter and JIT are unsupported).

@@ -5,9 +5,19 @@ theme = 'hugo-theme-stack'
 
 [permalinks.page]
 post = '/blog/:year/:month/:day/:slug/'
+page = ':slug'
 
-[[params.widgets.homepage]]
-type = "search"
+[[params.widgets.page]]
+type = "archives"
+
+[params.widgets.page.params]
+limit = 5
+
+[[params.widgets.page]]
+type = "tag-cloud"
+
+[params.widgets.page.params]
+limit = 10
 
 [[params.widgets.homepage]]
 type = "archives"
@@ -21,24 +31,18 @@ type = "tag-cloud"
 [params.widgets.homepage.params]
 limit = 10
 
-[[params.widgets.homepage]]
-type = "categories"
-
-[params.widgets.homepage.params]
-limit = 10
-
-
 [params.footer]
 since = 2001
 
 [params.imageProcessing.content]
 enabled = false
 
-[params.sidebar.avatar]
-enabled = false
+#[params.sidebar.avatar]
+#enabled = false
 
 [params.sidebar]
 subtitle = "Things about C#, .NET and low level topics I find interesting"
+
 
 [[menu.social]]
 identifier = "github"
