@@ -1,19 +1,24 @@
 ---
 title: "Fight the global warming: compile your C# apps ahead of time"
+slug: "fight-the-global-warming-compile-your-csharp-apps-ahead-of-time"
 date: 2019-05-01T18:45:19+09:00
+image: 00-engine.jpeg
+description: A look at how different kinds of ahead of time compilation in .NET work under the hood.
 ---
 
 > NOTE: This article captures a point in time in the past. While the general information is still correct, the CoreRT project got folded into [Native AOT publishing](https://learn.microsoft.com/dotnet/core/deploying/native-aot/) in .NET 7 and is now a supported part of .NET. The information about sizes is no longer accurate (and much better), neither is the information about support for dynamic code (both interpreter and JIT are unsupported).
 
-Ahead of time compilation (AOT) has been part of .NET ever since v1 of .NET framework came out. .NET framework had a technology called NGEN that allowed pre-generating native code and data structures at the time of installing a .NET program into the global assembly cache. NGEN created a cache of code and data structures the runtime would require to run the installed program. The cache was not complete — the runtime would fall back to doing just in time (JIT) compilation and loading when needed, but a great chunk of typical apps could be compiled ahead of time this way.
+Ahead of time compilation (AOT) has been part of .NET ever since v1 of .NET framework came out. .NET framework had a technology called NGEN that allowed pre-generating native code and data structures at the time of installing a .NET program into the global assembly cache. NGEN created a cache of code and data structures the runtime would require to run the installed program. The cache was not complete - the runtime would fall back to doing just in time (JIT) compilation and loading when needed, but a great chunk of typical apps could be compiled ahead of time this way.
 
 The Mono runtime (synonym for Xamarin for many) then stretched this caching approach further, making it possible to run without any just in time code generation at runtime. Mono achieved this by making more investments into pre-generating code for generics and various stubs that NGEN left out.
 
 While this can be called ahead of time compilation in a way, it is quite different from how C, Go, Swift, or Rust are compiled ahead of time. The implementation of AOT compilation in the mainstream .NET runtimes leaves a lot of the AOT benefits on the table. This article will explore those benefits.
 
+![Photo by Ciel Cheng on Unsplash](00-engine.jpeg)
+
 ## JIT vs AOT
 
-A common misconception is that the only difference between just-in-time and ahead-of-time runtimes is in the timing of native code generation. A JIT-compiling runtime will generate native code on demand — when your app is deployed and running in the target environment. An AOT-compiling runtime pre-generates native code as part of the app build.
+A common misconception is that the only difference between just-in-time and ahead-of-time runtimes is in the timing of native code generation. A JIT-compiling runtime will generate native code on demand - when your app is deployed and running in the target environment. An AOT-compiling runtime pre-generates native code as part of the app build.
 
 The source of this misconception lies in how the mainstream runtimes implemented ahead of time compilation in the past: add native code to a .NET assembly and call it good. An AOT compiler can do more than that.
 
@@ -32,7 +37,7 @@ The advantages of the IL format are twofold:
 * It's independent of the hardware or OS the code will run on, and
 * It has great version resiliency
 
-The version resiliency comes from the fact that CIL is a pretty high level intermediate language — it has instructions such as "load field X on type Y", or "call method U on type V". The details of what these instructions perform is encoded in the metadata.
+The version resiliency comes from the fact that CIL is a pretty high level intermediate language - it has instructions such as "load field X on type Y", or "call method U on type V". The details of what these instructions perform is encoded in the metadata.
 
 The richness of the metadata also means that a type can declare it derives from a type named `List` in namespace `System.Collections` in assembly `System.Collections` and the resolution of what that means will happen at runtime, by looking up the name in the `System.Collections` assembly. The definition of the base type can change (e.g. new methods and fields can be added), without requiring recompilation of an assembly that defines a type deriving from it.
 
@@ -45,7 +50,7 @@ It's also interesting to have a look at what an IL assembly does not have. You w
 * Machine code for a specific CPU architecture: the IL instructions cannot be directly executed on any processor. They have to be interpreted or compiled.
 * Data structures that would allow _efficient_ execution of the program.
 
-The second point might require a bit of explanation. While knowing the list of fields and their names on a type is nice, when we want to e.g. allocate a new instance of this type on the GC heap (using the `new` keyword in C#), we need to know the size of the type in bytes. This can be calculated by going over the list of fields, computing the sizes of the field's types (potentially recursively), and doing the same for the base classes. This is a lot of work — a lot of it involves looking up names of things across many assemblies.
+The second point might require a bit of explanation. While knowing the list of fields and their names on a type is nice, when we want to e.g. allocate a new instance of this type on the GC heap (using the `new` keyword in C#), we need to know the size of the type in bytes. This can be calculated by going over the list of fields, computing the sizes of the field's types (potentially recursively), and doing the same for the base classes. This is a lot of work - a lot of it involves looking up names of things across many assemblies.
 
 A just-in-time compiled .NET runtime will typically have a step called "type loading" where it builds an alternative representation of each type into a runtime allocated data structure. At that stage it will compute the information necessary to effectively execute the program: besides the size of the type, it will include information such as the list of offsets within instances of the given type that contain GC pointers (needed for the GC), or a table of virtual methods implemented by the type (needed for virtual calls). The runtime allocated data structure will also have a pointer back to the IL metadata to access some rarely used things.
 
@@ -61,7 +66,7 @@ When the .NET runtime team started looking in this direction some 11 years ago f
 
 ## A .NET Runtime for AOT
 
-Redhawk project picked up reusable parts of the CLR (such as the garbage collector — see references to FEATURE_REDHAWK in the CoreCLR's GC source code) and built a minimal runtime around it. This minimal runtime built for the Redhawk project later became the basis of .NET Native and CoreRT. You can still find references to Redhawk in the CoreRT source tree on GitHub.
+Redhawk project picked up reusable parts of the CLR (such as the garbage collector - see references to FEATURE_REDHAWK in the CoreCLR's GC source code) and built a minimal runtime around it. This minimal runtime built for the Redhawk project later became the basis of .NET Native and CoreRT. You can still find references to Redhawk in the CoreRT source tree on GitHub.
 
 When .NET Native [was announced](https://devblogs.microsoft.com/dotnet/announcing-net-native-preview/), it brought 60% gains in startup time over NGEN. These startup time improvements were made possible by using a runtime and file formats optimized for ahead of time compilation.
 
@@ -69,13 +74,13 @@ Remember the schematic for how programs are represented in an IL assembly? This 
 
 ![Image 2](02-eetype.jpeg)
 
-You'll notice that things like the list of methods on a type and names of types no longer exist in this format. This is because they're not actually needed when the program is compiled ahead of time. The real (non-abstract) CPUs only care about code — they don't care what type a method belongs to. They also don't care how many fields a type has — they just access a piece of memory at a particular offset.
+You'll notice that things like the list of methods on a type and names of types no longer exist in this format. This is because they're not actually needed when the program is compiled ahead of time. The real (non-abstract) CPUs only care about code - they don't care what type a method belongs to. They also don't care how many fields a type has - they just access a piece of memory at a particular offset.
 
-The minimal data structures in the schematic — such as the EEType structure describing the System.String type, contain the minimal amount of data required to run a .NET program. E.g. the RelatedType field on the EEType makes it possible to cast an instance of System.String to System.Object. Vtable slots support virtual method calls. BaseSize supports object allocation and garbage collection.
+The minimal data structures in the schematic - such as the EEType structure describing the System.String type, contain the minimal amount of data required to run a .NET program. E.g. the RelatedType field on the EEType makes it possible to cast an instance of System.String to System.Object. Vtable slots support virtual method calls. BaseSize supports object allocation and garbage collection.
 
 Decompiling a program in this representation into its source form poses the same level of complexity as e.g. decompiling C++.
 
-The data structures that this minimal .NET runtime operates on are in fact very similar to the data structures a C++ runtime library would operate on — and so is the size of the runtime. In the [minimal configuration](https://github.com/MichalStrehovsky/zerosharp), CoreRT can compile to a ~400 kB self-contained executable that includes the full runtime and garbage collector (the size data is for x64 — the 32bit targets can actually be smaller than that). The GC used in this configuration is still the same GC that handles gigabyte workloads in Azure.
+The data structures that this minimal .NET runtime operates on are in fact very similar to the data structures a C++ runtime library would operate on - and so is the size of the runtime. In the [minimal configuration](https://github.com/MichalStrehovsky/zerosharp), CoreRT can compile to a ~400 kB self-contained executable that includes the full runtime and garbage collector (the size data is for x64 - the 32bit targets can actually be smaller than that). The GC used in this configuration is still the same GC that handles gigabyte workloads in Azure.
 
 ## Startup time
 
@@ -87,13 +92,13 @@ The 60% startup time improvement that was observed for Universal Windows Apps wi
 
 ![Image 4](04-startupgraph.jpeg)
 
-Now, startup time doesn't matter much if your process is long-running — like a web server. It starts to matter when end users are exposed to the delay: startup time is the time when users stare at the hourglass cursor in a desktop app, app load splash screen in a mobile app, or empty webpage in a web app.
+Now, startup time doesn't matter much if your process is long-running - like a web server. It starts to matter when end users are exposed to the delay: startup time is the time when users stare at the hourglass cursor in a desktop app, app load splash screen in a mobile app, or empty webpage in a web app.
 
 ## Time to first user instruction
 
-An interesting metric is how long it takes from the process creation time until the first line of your Main() executes. A lot of things need to happen before a runtime can execute the first line of your code. This is actually quite simple to measure if you only need a ballpark number — place a call to the [times](https://linux.die.net/man/2/times) (on Linux) or [GetProcessTimes](https://docs.microsoft.com/en-us/windows/desktop/api/processthreadsapi/nf-processthreadsapi-getprocesstimes) (on Windows) API as the first line of your Main().
+An interesting metric is how long it takes from the process creation time until the first line of your Main() executes. A lot of things need to happen before a runtime can execute the first line of your code. This is actually quite simple to measure if you only need a ballpark number - place a call to the [times](https://linux.die.net/man/2/times) (on Linux) or [GetProcessTimes](https://docs.microsoft.com/en-us/windows/desktop/api/processthreadsapi/nf-processthreadsapi-getprocesstimes) (on Windows) API as the first line of your Main().
 
-This API gives you information about how much work the framework did before it got around to executing the first line of your program. For languages like C, this number will typically be 0 — the first line of your program will run before the OS gets the chance to update the statistics. If you're building command line apps you'll want this number to be 0. These numbers [add up](https://mail.python.org/pipermail/python-dev/2018-May/153296.html).
+This API gives you information about how much work the framework did before it got around to executing the first line of your program. For languages like C, this number will typically be 0 - the first line of your program will run before the OS gets the chance to update the statistics. If you're building command line apps you'll want this number to be 0. These numbers [add up](https://mail.python.org/pipermail/python-dev/2018-May/153296.html).
 
 Here's how time to first instruction looks like for various .NET runtimes:
 
@@ -111,7 +116,7 @@ Big difference between JIT and AOT runtimes is in sizes of the self-contained de
 
 Things get interesting with reflection. While the CPU doesn't care how you name your methods and an AOT compiler is free not to emit this information, the reflection APIs make it possible to locate any type, method or field by name, and provide access to extra information about these entities, such as the signature of the method, or names of the method parameters.
 
-The CoreRT compiler solves this problem by storing reflection information on the side — the information is not necessary to run the program, and the emission of it is optional. We can call this extra data "reflection tax". An AOT compiler can let you avoid paying it if you're not using it.
+The CoreRT compiler solves this problem by storing reflection information on the side - the information is not necessary to run the program, and the emission of it is optional. We can call this extra data "reflection tax". An AOT compiler can let you avoid paying it if you're not using it.
 
 ![Image 7](07-reflectiontax.jpeg)
 
@@ -119,7 +124,7 @@ Without the reflection data, the reflection experience becomes limited: one can 
 
 Reflection tax is an unexplored territory in .NET: since neither CoreCLR nor Mono can operate without IL metadata, omitting the metadata is not an option for mainstream runtimes. But this might be the door to sub-megabyte deployment sizes that is especially important for targets like WebAssembly.
 
-Traditionally ahead of time compiled languages don't have the unrestricted reflection that .NET provides and they prove that you can get work done without making everything available for reflection. A lot of things that people use reflection for these days (like serialization and deserialization) can be done without reflection — in a build task, at compile time. Doing this in a build task actually provides benefits for just-in-time runtimes too because reflection is slow.
+Traditionally ahead of time compiled languages don't have the unrestricted reflection that .NET provides and they prove that you can get work done without making everything available for reflection. A lot of things that people use reflection for these days (like serialization and deserialization) can be done without reflection - in a build task, at compile time. Doing this in a build task actually provides benefits for just-in-time runtimes too because reflection is slow.
 
 ## How about dynamic code?
 

@@ -3,17 +3,36 @@ languageCode = 'en-us'
 title = "Michal's low level corner"
 theme = 'hugo-theme-stack'
 
+[permalinks.page]
+post = '/blog/:year/:month/:day/:slug/'
+
 [[params.widgets.homepage]]
 type = "search"
 
-#[[params.widgets.homepage]]
-#type = "tag-cloud"
+[[params.widgets.homepage]]
+type = "archives"
 
-#[params.widgets.homepage.params]
-#limit = 10
+[params.widgets.homepage.params]
+limit = 5
+
+[[params.widgets.homepage]]
+type = "tag-cloud"
+
+[params.widgets.homepage.params]
+limit = 10
+
+[[params.widgets.homepage]]
+type = "categories"
+
+[params.widgets.homepage.params]
+limit = 10
+
 
 [params.footer]
 since = 2001
+
+[params.imageProcessing.content]
+enabled = false
 
 [params.sidebar.avatar]
 enabled = false

@@ -2,6 +2,8 @@
 title: "Building a universal Windows 7/Windows 10 .NET EXE"
 date: 2021-04-19T15:35:12+09:00
 description: Build a .NET 3.5 app that will run on Windows 10 without installing .NET 3.5.
+categories:
+  - hacks
 ---
 
 The problem with building a .NET (classic) executable that runs on both clean Windows 7 install and on Windows 10 is that Windows 7 only ships with .NET 3.5 inbox and Windows 10 ships with .NET 4.X. A .NET 3.5 executable will not run on a (clean install) Windows 10 directly. It can be coerced to do so in multiple ways, but none of them are "worry-free single file" solutions (config file, registry settings, environment variables, etc.).
