@@ -1,6 +1,6 @@
 ---
 title: "Top 3 whole program optimizations for AOT in .NET 8"
-slug: "top-3-whole-progam-optimizations-for-aot-in-net-8"
+slug: "top-3-whole-program-optimizations-for-aot-in-net-8"
 date: 2023-11-22T00:45:19+09:00
 image: title.jpg
 description: A look at some of the whole program optimizations that are done when you compile your app as native AOT.
