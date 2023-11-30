@@ -1,5 +1,5 @@
 ---
-title: "Top 3 whole program optimizations for AOT in .NET 8"
+title: "Top 3 whole program optimizations in .NET 8 native AOT"
 slug: "top-3-whole-program-optimizations-for-aot-in-net-8"
 date: 2023-11-22T00:45:19+09:00
 image: title.jpg
