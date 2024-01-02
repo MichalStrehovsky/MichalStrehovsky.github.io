@@ -349,6 +349,6 @@ qrencode -r minimaze-crinkled.exe -l M -o minimaze-crinkled.png -8
 
 ![A large QR code](qr.png)
 
-If you scan the above QR code with a reader, you should get the game's executable data. You can try scannig it and running the game.
+If you scan the above QR code with a reader, you should get the game's executable data. You can try scanning it and running the game.
 
 If you're interested in learning more about sizecoding, I recommend the [in4k site](https://in4k.github.io/wiki/about) - even though most resources focus on C and C++, they translate easily to C# as well. What game can you fit in 4 kB? What can you do in 8 kB?
