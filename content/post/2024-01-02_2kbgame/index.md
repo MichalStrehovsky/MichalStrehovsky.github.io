@@ -101,7 +101,7 @@ struct ScreenBuffer
 
 One interesting thing to call out is the `fixed byte _pixel[Width * Height * 4]` field: this is the C# syntax to declare a [fixed array](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/unsafe-code-pointers/fixed-size-buffers). A fixed array is an array whose individual elements are a part of the struct. You can think of it as a shortcut for a set of fields `byte _pixel_0, _pixel_1, _pixel_2, _pixel_3,... _pixel_N` that one can access as an array. The size of this array needs to be a compile time constant so that the size of the entire struct is fixed.
 
-We need to prepare one more structure: a `BITMAPINFO` structure that tells Win32 about the properties of our screen buffer:
+We need to prepare one more structure: a `BITMAPINFO` structure that tells Win32 about the properties of our screen buffer. I'm going to place it into a `static` variable for the same reason as the `ScreenBuffer` above - so that it can get placed into the data segment of the executable as a blob of initialized/literal data later (saving us from needing the code to initialize the individual fields).
 
 ```csharp
 class BitmapInfo
