@@ -7,4 +7,3 @@ tags:
 Can you say &#8220;resource leak&#8221;?
 
 ![Good advice](IMG_00011.PNG)
-</div>

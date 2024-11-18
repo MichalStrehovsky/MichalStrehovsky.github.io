@@ -9,7 +9,7 @@ tags:
   - long-form
 ---
 
-> NOTE: This is a refresh of my [4 year old article]({{< ref "../2020-01-03_8kbgame/" >}}) but with a more interesting game and a much smaller file size this time.
+> NOTE: This is a refresh of my [4 year old article]({{< ref "../2020-01-03_8kbgame/index.md" >}}) but with a more interesting game and a much smaller file size this time.
 
 As someone who grew up in the times of 1.44 MB floppy disks and 56 kbit modems, I've always liked small programs. I could fit many small programs on a floppy disk I carried with me. If a program couldn't fit on my floppy disk, I started thinking about why - does it have a lot of graphics? Is there music? Can the program do many complex things? Or is it simply _bloated_?
 

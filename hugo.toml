@@ -53,12 +53,12 @@ url = "https://github.com/MichalStrehovsky"
 icon = "brand-github"
 
 [[menu.social]]
-identifier = "twitter"
-name = "Twitter"
-url = "https://twitter.com/MStrehovsky"
+identifier = "bluesky"
+name = "Bluesky"
+url = "https://bsky.app/profile/migeel.sk"
 
 [menu.social.params]
-icon = "brand-twitter"
+icon = "brand-bluesky"
 
 [[menu.social]]
 identifier = "rss"
